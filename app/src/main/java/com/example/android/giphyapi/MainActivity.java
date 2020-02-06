@@ -6,8 +6,6 @@ import android.os.Bundle;
 
 public class MainActivity extends AppCompatActivity {
 
-    String Key="s4rUU3v7MsyekuqBlKStgCz6X2FKqAZZ";
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
