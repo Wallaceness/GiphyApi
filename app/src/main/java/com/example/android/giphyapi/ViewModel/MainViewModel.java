@@ -15,23 +15,23 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class MainViewModel extends ViewModel {
-    private MutableLiveData<List<String>> GIFS = new MutableLiveData<>();
+    private MutableLiveData<com.example.android.giphyapi.model.Response> GIFS = new MutableLiveData<>();
     private MutableLiveData<String> error = new MutableLiveData<>();
 
     private Repository repo = Repository.getInstance();
 
     public void fetchGIFData(String query) {
         repo.getGIF(query)
-                .enqueue(new Callback<List<String>>() {
+                .enqueue(new Callback<com.example.android.giphyapi.model.Response>() {
                     @Override
-                    public void onResponse(Call<List<String>> call, Response<List<String>> response) {
+                    public void onResponse(Call<com.example.android.giphyapi.model.Response> call, Response<com.example.android.giphyapi.model.Response> response) {
                         GIFS.postValue(response.body());
                         error.postValue("");
                     }
 
                     @Override
-                    public void onFailure(Call<List<String>> call, Throwable t) {
-                        GIFS.postValue(new ArrayList<String>());
+                    public void onFailure(Call<com.example.android.giphyapi.model.Response> call, Throwable t) {
+                        GIFS.postValue(new com.example.android.giphyapi.model.Response());
                         error.postValue(t.getMessage());
                     }
                 });
@@ -41,7 +41,7 @@ public class MainViewModel extends ViewModel {
         return new Random().nextInt(10);
     }
 
-    public LiveData<List<String>> getGIFSLiveData() {
+    public LiveData<com.example.android.giphyapi.model.Response> getGIFSLiveData() {
         return GIFS;
     }
 

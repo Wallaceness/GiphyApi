@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
 import com.example.android.giphyapi.R;
 import com.squareup.picasso.Picasso;
 
@@ -34,8 +35,10 @@ public class MainFragment extends Fragment {
         return rootView;
     }
 
-    void loadPicasso(String url){
-        Picasso.get().load(url).into(theGIF);
+    void loadGlide(String url){
+        Glide.with(requireContext())
+                .load(url)
+                .into(theGIF);
 
     }
 }

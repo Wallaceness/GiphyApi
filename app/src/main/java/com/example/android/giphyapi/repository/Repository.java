@@ -1,8 +1,7 @@
 package com.example.android.giphyapi.repository;
 
 import com.example.android.giphyapi.View.APIKey;
-
-import java.util.List;
+import com.example.android.giphyapi.model.Response;
 
 import retrofit2.Call;
 import retrofit2.Retrofit;
@@ -26,7 +25,7 @@ public class Repository {
         return RepositoryHolder.INSTANCE;
     }
 
-    public Call<List<String>> getGIF(String query) {
+    public Call<Response> getGIF(String query) {
         return RETROFIT.create(Giphy.class)
                 .getGIF(
                         query,
