@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.example.android.giphyapi.R;
+import com.squareup.picasso.Picasso;
 
 
 /**
@@ -33,4 +34,8 @@ public class MainFragment extends Fragment {
         return rootView;
     }
 
+    void loadPicasso(String url){
+        Picasso.get().load(url).into(theGIF);
+
+    }
 }
