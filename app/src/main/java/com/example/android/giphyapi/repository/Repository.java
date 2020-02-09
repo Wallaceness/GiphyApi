@@ -30,7 +30,7 @@ public class Repository {
                 .getGIF(
                         query,
                         APIKey.getKey(),
-                        1
+                        25
                 );
     }
 }
