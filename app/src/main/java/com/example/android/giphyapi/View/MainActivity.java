@@ -20,8 +20,12 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         theManager = getSupportFragmentManager();
-//        NavHostFragment.findNavController(navHost).navigate(id);
+        navHost = (NavHostFragment) theManager.findFragmentById(R.id.nav_host_fragment);
 //        viewModel.fetchGIFData("Snoopy");
+    }
+
+    public void navigateTo(int id){
+        NavHostFragment.findNavController(navHost).navigate(id);
     }
 
 }

@@ -6,6 +6,8 @@ import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,29 +17,29 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
 import com.example.android.giphyapi.R;
 import com.example.android.giphyapi.ViewModel.MainViewModel;
+import com.example.android.giphyapi.model.DataItem;
 import com.example.android.giphyapi.model.Response;
-import com.squareup.picasso.Picasso;
+
+import java.util.ArrayList;
 
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class MainFragment extends Fragment {
-    private ImageView theGIF;
+public class RecyclerFragment extends Fragment {
+
     private Button searchButton;
     private EditText searchText;
     private MainActivity main;
-    private Button nextButton;
     private MainViewModel viewModel;
-    private Response responses;
-    private int position=0;
-    private Button navButton;
+    private RecyclerView gifRecycler;
+    private ArrayList<DataItem> gifs;
+    private RecycleAdapter gifAdapter;
+    private Button BackButton;
 
-
-    public MainFragment() {
+    public RecyclerFragment() {
         // Required empty public constructor
     }
 
@@ -46,15 +48,20 @@ public class MainFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-        theGIF = rootView.findViewById(R.id.androidGIF);
-        searchButton = rootView.findViewById(R.id.searchButton);
-        searchText = rootView.findViewById(R.id.headerDiv);
-        nextButton = rootView.findViewById(R.id.nextButton);
-        navButton = rootView.findViewById(R.id.navButton1);
-        main = (MainActivity) getActivity();
+        View rootView =inflater.inflate(R.layout.fragment_recycler, container, false);
+        searchButton = rootView.findViewById(R.id.searchButton2);
+        searchText = rootView.findViewById(R.id.editText1);
+        BackButton = rootView.findViewById(R.id.backButton2);
         viewModel = new ViewModelProvider.NewInstanceFactory().create(MainViewModel.class);
+        main = (MainActivity) getActivity();
+        gifRecycler = rootView.findViewById(R.id.recycleGrid);
         setUpObservers();
+        gifs = new ArrayList<DataItem>();
+
+        //set up adapter
+        gifAdapter= new RecycleAdapter(gifs, this);
+        gifRecycler.setAdapter(gifAdapter);
+        gifRecycler.setLayoutManager(new GridLayoutManager(requireContext(), 4));
 
 
         searchButton.setOnClickListener(new View.OnClickListener() {
@@ -64,32 +71,22 @@ public class MainFragment extends Fragment {
             }
         });
 
-        nextButton.setOnClickListener(new View.OnClickListener() {
+        BackButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MainFragment.this.position+=1;
-                loadGlide(responses.getData().get(position).getImages().getOriginal().getUrl());
-            }
-        });
-
-        navButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                main.navigateTo(R.id.recyclerFragment);
+                main.navigateTo(R.id.mainFragment);
             }
         });
 
         return rootView;
     }
-
     private void setUpObservers() {
         viewModel.getGIFSLiveData().observe(getViewLifecycleOwner(), new Observer<Response>() {
             @Override
             public void onChanged(Response urls) {
                 if (urls != null) {
                     if (!urls.getData().isEmpty()){
-                        loadGlide(urls.getData().get(0).getImages().getOriginal().getUrl());
-                        responses = urls;
+                        gifs = (ArrayList) urls.getData();
                     }
                     else
                         Toast.makeText(main, "NO DATA", Toast.LENGTH_SHORT).show();
@@ -103,10 +100,4 @@ public class MainFragment extends Fragment {
         });
     }
 
-    private void loadGlide(String url){
-        Glide.with(requireContext())
-                .load(url)
-                .into(theGIF);
-
-    }
 }

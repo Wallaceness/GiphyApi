@@ -10,7 +10,6 @@
         android:id="@+id/headerDiv"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="@string/snoopy"
         app:layout_constraintBottom_toTopOf="@+id/androidGIF"
         app:layout_constraintEnd_toStartOf="@id/guide1"
         app:layout_constraintStart_toStartOf="parent"
@@ -47,5 +46,11 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:id="@+id/androidGIF"
         android:contentDescription="@string/put_your_gif_here"/>
+    <Button android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:id="@+id/navButton1"
+        android:background="@drawable/ic_apps_black_24dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
