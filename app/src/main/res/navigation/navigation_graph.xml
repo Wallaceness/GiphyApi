@@ -22,5 +22,24 @@
         <action
             android:id="@+id/action_recyclerFragment_to_mainFragment"
             app:destination="@id/mainFragment" />
+        <action
+            android:id="@+id/action_recyclerFragment_to_fullscreenFragment"
+            app:destination="@id/fullscreenFragment">
+<!--            <argument android:name="imageUrl"-->
+<!--                app:argType="string"-->
+<!--                android:defaultValue="none"/>-->
+        </action>
+    </fragment>
+    <fragment
+        android:id="@+id/fullscreenFragment"
+        android:name="com.example.android.giphyapi.View.FullscreenFragment"
+        android:label="fragment_fullscreen"
+        tools:layout="@layout/fragment_fullscreen">
+        <argument android:name="imageUrl"
+            app:argType="string"
+            android:defaultValue="none"/>
+        <action
+            android:id="@+id/action_fullscreenFragment_to_recyclerFragment"
+            app:destination="@id/recyclerFragment" />
     </fragment>
 </navigation>

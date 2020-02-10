@@ -67,7 +67,7 @@ public class RecyclerFragment extends Fragment {
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                viewModel.fetchGIFData(searchText.getText().toString());
+                viewModel.fetchGIFData(searchText.getText().toString(), 0);
             }
         });
 
@@ -87,6 +87,7 @@ public class RecyclerFragment extends Fragment {
                 if (urls != null) {
                     if (!urls.getData().isEmpty()){
                         gifs = (ArrayList) urls.getData();
+                        gifAdapter.resizeView(gifs);
                     }
                     else
                         Toast.makeText(main, "NO DATA", Toast.LENGTH_SHORT).show();

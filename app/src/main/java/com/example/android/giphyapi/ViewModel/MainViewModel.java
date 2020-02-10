@@ -6,8 +6,6 @@ import androidx.lifecycle.ViewModel;
 
 import com.example.android.giphyapi.repository.Repository;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 
 import retrofit2.Call;
@@ -20,8 +18,8 @@ public class MainViewModel extends ViewModel {
 
     private Repository repo = Repository.getInstance();
 
-    public void fetchGIFData(String query) {
-        repo.getGIF(query)
+    public void fetchGIFData(String query, int offset) {
+        repo.getGIF(query, offset)
                 .enqueue(new Callback<com.example.android.giphyapi.model.Response>() {
                     @Override
                     public void onResponse(Call<com.example.android.giphyapi.model.Response> call, Response<com.example.android.giphyapi.model.Response> response) {

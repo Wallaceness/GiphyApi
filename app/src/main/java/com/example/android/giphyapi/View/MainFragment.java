@@ -60,7 +60,7 @@ public class MainFragment extends Fragment {
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                viewModel.fetchGIFData(searchText.getText().toString());
+                viewModel.fetchGIFData(searchText.getText().toString(), 0);
             }
         });
 
@@ -68,7 +68,12 @@ public class MainFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 MainFragment.this.position+=1;
-                loadGlide(responses.getData().get(position).getImages().getOriginal().getUrl());
+                if ((position+1)%25==1 && position>1){
+                    viewModel.fetchGIFData(searchText.getText().toString(), ((position+1)/25)*25);
+                }
+                else if (responses!=null){
+                    loadGlide(responses.getData().get(position%25).getImages().getOriginal().getUrl());
+                }
             }
         });
 

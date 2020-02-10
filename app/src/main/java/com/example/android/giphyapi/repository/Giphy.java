@@ -13,5 +13,6 @@ public interface Giphy {
     Call<Response> getGIF(
             @Query("q") String query,
             @Query("api_key") String Key,
-            @Query("limit") int limit);
+            @Query("limit") int limit,
+            @Query("offset") int offset);
 }

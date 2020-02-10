@@ -7,19 +7,18 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.android.giphyapi.R;
 import com.example.android.giphyapi.model.DataItem;
-import com.example.android.giphyapi.model.Response;
 
 import java.util.ArrayList;
 
 public class RecycleAdapter extends RecyclerView.Adapter<RecycleAdapter.GifHolder> {
 
     private ArrayList<DataItem> gifs;
-    private LayoutInflater inflater;
     private RecyclerFragment parent;
 
     public RecycleAdapter(ArrayList<DataItem> gifs, RecyclerFragment context){
@@ -30,13 +29,27 @@ public class RecycleAdapter extends RecyclerView.Adapter<RecycleAdapter.GifHolde
     @NonNull
     @Override
     public GifHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View holder = inflater.inflate(R.layout.gif_item, parent, false);
+        View holder = LayoutInflater.from(parent.getContext()).inflate(R.layout.gif_item, parent, false);
         return new GifHolder(holder, this);
     }
 
     @Override
     public void onBindViewHolder(@NonNull GifHolder holder, int position) {
-        Glide.with(holder.ada.parent).load(gifs.get(position).getImages().getOriginal().getUrl()).into(holder.gif);
+        String url = gifs.get(position).getImages().getOriginal().getUrl();
+        Glide.with(holder.gif.getContext()).load(url).into(holder.gif);
+        holder.gif.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                RecyclerFragmentDirections.ActionRecyclerFragmentToFullscreenFragment action = RecyclerFragmentDirections.actionRecyclerFragmentToFullscreenFragment();
+                action.setImageUrl(url);
+                Navigation.findNavController(v).navigate(action);
+            }
+        });
+    }
+
+    public void resizeView(ArrayList<DataItem> gifs){
+        this.gifs = gifs;
+        notifyDataSetChanged();
     }
 
     @Override
@@ -45,8 +58,8 @@ public class RecycleAdapter extends RecyclerView.Adapter<RecycleAdapter.GifHolde
     }
 
     class GifHolder extends RecyclerView.ViewHolder{
-        private ImageView gif;
-        private RecycleAdapter ada;
+        ImageView gif;
+        RecycleAdapter ada;
 
         GifHolder(View v, RecycleAdapter adapter){
             super(v);

@@ -25,12 +25,13 @@ public class Repository {
         return RepositoryHolder.INSTANCE;
     }
 
-    public Call<Response> getGIF(String query) {
+    public Call<Response> getGIF(String query, int offset) {
         return RETROFIT.create(Giphy.class)
                 .getGIF(
                         query,
                         APIKey.getKey(),
-                        25
+                        25,
+                        offset
                 );
     }
 }
