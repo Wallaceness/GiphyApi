@@ -22,15 +22,24 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@+id/androidGIF"
         app:layout_constraintStart_toEndOf="@id/guide1"
-        app:layout_constraintEnd_toStartOf="@id/nextButton" />
+        app:layout_constraintEnd_toStartOf="@id/backButton" />
     <Button android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:id="@+id/nextButton"
-        app:layout_constraintStart_toEndOf="@id/searchButton"
+        app:layout_constraintStart_toEndOf="@id/backButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@id/androidGIF"
         android:background="@drawable/next_foreground"/>
+    <Button
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/backButton"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toEndOf="@id/searchButton"
+        app:layout_constraintEnd_toStartOf="@id/nextButton"
+        app:layout_constraintBottom_toTopOf="@id/androidGIF"
+        android:background="@drawable/back_foreground"/>
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guide1"
         android:layout_width="0dp"

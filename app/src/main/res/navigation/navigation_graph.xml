@@ -13,6 +13,13 @@
         <action
             android:id="@+id/action_mainFragment_to_recyclerFragment"
             app:destination="@id/recyclerFragment" />
+        <action
+            android:id="@+id/action_mainFragment_to_fullscreenFragment"
+            app:destination="@id/fullscreenFragment" >
+            <argument android:name="imageUrl"
+                app:argType="string"
+                android:defaultValue="none"/>
+        </action>
     </fragment>
     <fragment
         android:id="@+id/recyclerFragment"
@@ -25,9 +32,9 @@
         <action
             android:id="@+id/action_recyclerFragment_to_fullscreenFragment"
             app:destination="@id/fullscreenFragment">
-<!--            <argument android:name="imageUrl"-->
-<!--                app:argType="string"-->
-<!--                android:defaultValue="none"/>-->
+            <argument android:name="imageUrl"
+                app:argType="string"
+                android:defaultValue="none"/>
         </action>
     </fragment>
     <fragment
@@ -41,5 +48,8 @@
         <action
             android:id="@+id/action_fullscreenFragment_to_recyclerFragment"
             app:destination="@id/recyclerFragment" />
+        <action
+            android:id="@+id/action_fullscreenFragment_to_mainFragment"
+            app:destination="@id/mainFragment" />
     </fragment>
 </navigation>

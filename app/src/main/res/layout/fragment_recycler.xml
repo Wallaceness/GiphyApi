@@ -28,7 +28,7 @@
     <Button android:layout_height="wrap_content"
         android:layout_width="0dp"
         android:id="@+id/backButton2"
-        android:background="@drawable/ic_arrow_back_black_24dp"
+        android:background="@drawable/back_foreground"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@+id/recycleGrid"
         app:layout_constraintStart_toEndOf="@id/searchButton2"

@@ -3,6 +3,7 @@ package com.example.android.giphyapi.View;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -12,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -38,6 +40,8 @@ public class RecyclerFragment extends Fragment {
     private ArrayList<DataItem> gifs;
     private RecycleAdapter gifAdapter;
     private Button BackButton;
+    private boolean isScrolling=false;
+    int currentItems, totalItems, scrollOutItems;
 
     public RecyclerFragment() {
         // Required empty public constructor
@@ -61,7 +65,30 @@ public class RecyclerFragment extends Fragment {
         //set up adapter
         gifAdapter= new RecycleAdapter(gifs, this);
         gifRecycler.setAdapter(gifAdapter);
-        gifRecycler.setLayoutManager(new GridLayoutManager(requireContext(), 4));
+        GridLayoutManager manager = new GridLayoutManager(requireContext(), 4);
+        gifRecycler.setLayoutManager(manager);
+        gifRecycler.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                if (newState== AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL){
+                    isScrolling = true;
+                }
+            }
+
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                currentItems=manager.getChildCount();
+                totalItems = manager.getItemCount();
+                scrollOutItems = manager.findFirstVisibleItemPosition();
+
+                if (isScrolling && currentItems + scrollOutItems==totalItems){
+                    isScrolling = false;
+                    viewModel.fetchGIFData(searchText.getText().toString(), gifs.size());
+                }
+            }
+        });
 
 
         searchButton.setOnClickListener(new View.OnClickListener() {
@@ -86,7 +113,8 @@ public class RecyclerFragment extends Fragment {
             public void onChanged(Response urls) {
                 if (urls != null) {
                     if (!urls.getData().isEmpty()){
-                        gifs = (ArrayList) urls.getData();
+                        ArrayList<DataItem> moreGifs = (ArrayList) urls.getData();
+                        gifs.addAll(moreGifs);
                         gifAdapter.resizeView(gifs);
                     }
                     else
