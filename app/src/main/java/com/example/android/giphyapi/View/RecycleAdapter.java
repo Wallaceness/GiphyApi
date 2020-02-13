@@ -19,11 +19,9 @@ import java.util.ArrayList;
 public class RecycleAdapter extends RecyclerView.Adapter<RecycleAdapter.GifHolder> {
 
     private ArrayList<DataItem> gifs;
-    private RecyclerFragment parent;
 
     public RecycleAdapter(ArrayList<DataItem> gifs, RecyclerFragment context){
         this.gifs = gifs;
-        parent = context;
     }
 
     @NonNull
@@ -48,8 +46,8 @@ public class RecycleAdapter extends RecyclerView.Adapter<RecycleAdapter.GifHolde
     }
 
     public void resizeView(ArrayList<DataItem> gifs){
-        this.gifs = gifs;
-        notifyDataSetChanged();
+        this.gifs.addAll(gifs);
+//        notifyDataSetChanged();
     }
 
     @Override

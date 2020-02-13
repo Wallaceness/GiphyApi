@@ -3,11 +3,11 @@ package com.example.android.giphyapi.View;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
-import androidx.navigation.fragment.NavHostFragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -58,6 +58,16 @@ public class MainFragment extends Fragment {
         main = (MainActivity) getActivity();
         viewModel = new ViewModelProvider.NewInstanceFactory().create(MainViewModel.class);
         setUpObservers();
+        if(savedInstanceState!=null){
+            position=savedInstanceState.getInt("POSITION");
+        }
+        if (responses!=null){
+            loadGlide(responses.getData().get(position%25).getImages().getOriginal().getUrl());
+        }
+        else if (savedInstanceState!=null && !savedInstanceState.getString("TERM").isEmpty()){
+            viewModel.fetchGIFData(savedInstanceState.getString("TERM"), ((position+1)/25)*25);
+
+        }
 
         theGIF.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -144,5 +154,12 @@ public class MainFragment extends Fragment {
                 .load(url)
                 .into(theGIF);
 
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt("POSITION", position);
+        outState.putString("TERM", searchText.getText().toString());
     }
 }

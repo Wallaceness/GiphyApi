@@ -17,6 +17,7 @@ import android.widget.AbsListView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.android.giphyapi.R;
@@ -41,7 +42,8 @@ public class RecyclerFragment extends Fragment {
     private RecycleAdapter gifAdapter;
     private Button BackButton;
     private boolean isScrolling=false;
-    int currentItems, totalItems, scrollOutItems;
+    private int currentItems, totalItems, scrollOutItems;
+    private ProgressBar loadingBar;
 
     public RecyclerFragment() {
         // Required empty public constructor
@@ -59,8 +61,14 @@ public class RecyclerFragment extends Fragment {
         viewModel = new ViewModelProvider.NewInstanceFactory().create(MainViewModel.class);
         main = (MainActivity) getActivity();
         gifRecycler = rootView.findViewById(R.id.recycleGrid);
+        loadingBar = rootView.findViewById(R.id.loadingBar);
         setUpObservers();
-        gifs = new ArrayList<DataItem>();
+        if(gifs==null){
+            gifs = new ArrayList<DataItem>();
+            if (savedInstanceState!=null){
+                viewModel.fetchGIFData(savedInstanceState.getString("TERM"), 0);
+            }
+        }
 
         //set up adapter
         gifAdapter= new RecycleAdapter(gifs, this);
@@ -85,6 +93,7 @@ public class RecyclerFragment extends Fragment {
 
                 if (isScrolling && currentItems + scrollOutItems==totalItems){
                     isScrolling = false;
+                    loadingBar.setVisibility(ProgressBar.VISIBLE);
                     viewModel.fetchGIFData(searchText.getText().toString(), gifs.size());
                 }
             }
@@ -94,6 +103,7 @@ public class RecyclerFragment extends Fragment {
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                loadingBar.setVisibility(ProgressBar.VISIBLE);
                 viewModel.fetchGIFData(searchText.getText().toString(), 0);
             }
         });
@@ -114,19 +124,27 @@ public class RecyclerFragment extends Fragment {
                 if (urls != null) {
                     if (!urls.getData().isEmpty()){
                         ArrayList<DataItem> moreGifs = (ArrayList) urls.getData();
-                        gifs.addAll(moreGifs);
-                        gifAdapter.resizeView(gifs);
+                        gifAdapter.resizeView(moreGifs);
                     }
                     else
                         Toast.makeText(main, "NO DATA", Toast.LENGTH_SHORT).show();
                 }
+                loadingBar.setVisibility(ProgressBar.INVISIBLE);
             }
         });
 
         viewModel.getErrorLiveData().observe(getViewLifecycleOwner(), isError -> {
             if (!isError.isEmpty())
                 Toast.makeText(main, isError, Toast.LENGTH_SHORT).show();
+            loadingBar.setVisibility(ProgressBar.INVISIBLE);
         });
     }
 
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if (!searchText.getText().toString().isEmpty()){
+            outState.putString("TERM", searchText.getText().toString());
+        }
+    }
 }
